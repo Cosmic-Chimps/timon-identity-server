@@ -12,12 +12,13 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using IdentityServerHost.Quickstart.UI;
+using TimonIdentityServer.Quickstart.UI;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TimonIdentityServer.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace TimonIdentityServer.Quickstart.Account
 {
@@ -113,6 +114,26 @@ namespace TimonIdentityServer.Quickstart.Account
                 {
                     var user = await _userManager.FindByNameAsync(model.Username);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
+                    
+                    // only set explicit expiration here if user chooses "remember me". 
+                    // otherwise we rely upon expiration configured in cookie middleware.
+                    AuthenticationProperties props = null;
+                    if (AccountOptions.AllowRememberLogin && model.RememberLogin)
+                    {
+                        props = new AuthenticationProperties
+                        {
+                            IsPersistent = true,
+                            ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
+                        };
+                    };
+
+                    // issue authentication cookie with subject ID and username
+                    var identityServerUser = new IdentityServerUser(user.Id)
+                    {
+                        DisplayName = user.UserName
+                    };
+
+                    await HttpContext.SignInAsync(identityServerUser, props);
 
                     if (context != null)
                     {
@@ -127,9 +148,15 @@ namespace TimonIdentityServer.Quickstart.Account
 
                     // request for a local page
                     if (Url.IsLocalUrl(model.ReturnUrl))
+                    {
                         return Redirect(model.ReturnUrl);
+                    }
+
                     if (string.IsNullOrEmpty(model.ReturnUrl))
+                    {
                         return Redirect("~/");
+                    }
+                    
                     throw new Exception("invalid return URL");
                 }
 

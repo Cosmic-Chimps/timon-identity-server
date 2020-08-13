@@ -14,8 +14,10 @@ using System.Threading.Tasks;
 using IdentityServer4.Validation;
 using System.Collections.Generic;
 using System;
+using TimonIdentityServer.Quickstart;
+using TimonIdentityServer.Quickstart.Consent;
 
-namespace IdentityServerHost.Quickstart.UI
+namespace TimonIdentityServer.Quickstart.UI
 {
     /// <summary>
     /// This controller processes the consent UI

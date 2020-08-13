@@ -3,8 +3,9 @@
 
 
 using System.Collections.Generic;
+using TimonIdentityServer.Quickstart.Consent;
 
-namespace IdentityServerHost.Quickstart.UI
+namespace TimonIdentityServer.Quickstart.UI
 {
     public class ConsentViewModel : ConsentInputModel
     {

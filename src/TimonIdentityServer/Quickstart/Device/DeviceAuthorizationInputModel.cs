@@ -2,7 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-namespace IdentityServerHost.Quickstart.UI
+using TimonIdentityServer.Quickstart.Consent;
+using TimonIdentityServer.Quickstart.UI;
+
+namespace TimonIdentityServer.Quickstart.Device
 {
     public class DeviceAuthorizationInputModel : ConsentInputModel
     {

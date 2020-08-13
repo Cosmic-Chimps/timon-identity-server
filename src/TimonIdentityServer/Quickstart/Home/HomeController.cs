@@ -9,8 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using TimonIdentityServer.Quickstart;
 
-namespace IdentityServerHost.Quickstart.UI
+namespace TimonIdentityServer.Quickstart.UI
 {
     [SecurityHeaders]
     [AllowAnonymous]

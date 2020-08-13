@@ -39,11 +39,14 @@ namespace TimonIdentityServer
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly))
             );
+            
+            services.AddDbContext<Data.ConfigurationDbContext>(options => options.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options => {
                 options.SignIn.RequireConfirmedEmail = true;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultUI()
             .AddDefaultTokenProviders();
 
             var builder = services.AddIdentityServer(options => {
@@ -70,6 +73,7 @@ namespace TimonIdentityServer
                     b.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
                 options.EnableTokenCleanup = true;
             })
+            .AddJwtBearerClientAuthentication()
             .AddAspNetIdentity<ApplicationUser>();
             
             if (Environment.IsDevelopment())
@@ -80,6 +84,8 @@ namespace TimonIdentityServer
             {
                 throw new Exception("need to configure key material");
             }
+            
+            services.AddRazorPages();
 
             services.AddAuthentication();
         }
@@ -89,57 +95,17 @@ namespace TimonIdentityServer
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
             
-            var seed = Configuration.GetSection("Data").GetValue<bool>("Seed");
-            if (seed)
-            {
-                InitializeDatabase(app);
-                throw new Exception("Seeding completed. Disable the seed flag in appsettings");
-            }
-
             app.UseStaticFiles();
             app.UseRouting();
 
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
-        }
-        
-        private void InitializeDatabase(IApplicationBuilder app)
-        {
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            app.UseEndpoints(endpoints =>
             {
-                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
-
-                var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-                context.Database.Migrate();
-                if (!context.Clients.Any())
-                {
-                    foreach (var client in Config.GetClients())
-                    {
-                        context.Clients.Add(client.ToEntity());
-                    }
-                    context.SaveChanges();
-                }
-
-                if (!context.IdentityResources.Any())
-                {
-                    foreach (var resource in Config.GetIdentityResources())
-                    {
-                        context.IdentityResources.Add(resource.ToEntity());
-                    }
-                    context.SaveChanges();
-                }
-
-                if (!context.ApiResources.Any())
-                {
-                    foreach (var resource in Config.GetApis())
-                    {
-                        context.ApiResources.Add(resource.ToEntity());
-                    }
-                    context.SaveChanges();
-                }
-            }
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
+            });
         }
     }
 }

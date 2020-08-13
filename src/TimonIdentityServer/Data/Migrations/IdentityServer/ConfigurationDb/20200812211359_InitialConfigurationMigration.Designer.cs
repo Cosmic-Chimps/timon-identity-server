@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TimonIdentityServer.Data;
@@ -9,9 +10,10 @@ using TimonIdentityServer.Data;
 namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
-    partial class ConfigurationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200812211359_InitialConfigurationMigration")]
+    partial class InitialConfigurationMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,18 +69,6 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                         .IsUnique();
 
                     b.ToTable("ApiResources");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Created = new DateTime(2020, 8, 13, 22, 35, 15, 101, DateTimeKind.Utc).AddTicks(1040),
-                            DisplayName = "Timon",
-                            Enabled = true,
-                            Name = "timon",
-                            NonEditable = false,
-                            ShowInDiscoveryDocument = true
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiResourceClaim", b =>
@@ -227,18 +217,6 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                         .IsUnique();
 
                     b.ToTable("ApiScopes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DisplayName = "timon",
-                            Emphasize = false,
-                            Enabled = true,
-                            Name = "timon",
-                            Required = false,
-                            ShowInDiscoveryDocument = true
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiScopeClaim", b =>
@@ -446,42 +424,6 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                         .IsUnique();
 
                     b.ToTable("Clients");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AbsoluteRefreshTokenLifetime = 2592000,
-                            AccessTokenLifetime = 3600,
-                            AccessTokenType = 0,
-                            AllowAccessTokensViaBrowser = false,
-                            AllowOfflineAccess = false,
-                            AllowPlainTextPkce = false,
-                            AllowRememberConsent = true,
-                            AlwaysIncludeUserClaimsInIdToken = false,
-                            AlwaysSendClientClaims = false,
-                            AuthorizationCodeLifetime = 300,
-                            BackChannelLogoutSessionRequired = true,
-                            ClientClaimsPrefix = "client_",
-                            ClientId = "client",
-                            Created = new DateTime(2020, 8, 13, 22, 35, 15, 102, DateTimeKind.Utc).AddTicks(9130),
-                            DeviceCodeLifetime = 300,
-                            EnableLocalLogin = true,
-                            Enabled = true,
-                            FrontChannelLogoutSessionRequired = true,
-                            IdentityTokenLifetime = 300,
-                            IncludeJwtId = false,
-                            NonEditable = false,
-                            ProtocolType = "oidc",
-                            RefreshTokenExpiration = 1,
-                            RefreshTokenUsage = 1,
-                            RequireClientSecret = true,
-                            RequireConsent = true,
-                            RequirePkce = false,
-                            RequireRequestObject = false,
-                            SlidingRefreshTokenLifetime = 1296000,
-                            UpdateAccessTokenClaimsOnRefresh = false
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientClaim", b =>
@@ -531,14 +473,6 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasIndex("ClientId");
 
                     b.ToTable("ClientCorsOrigins");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClientId = 1,
-                            Origin = "http://localhost:5003"
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientGrantType", b =>
@@ -561,32 +495,6 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasIndex("ClientId");
 
                     b.ToTable("ClientGrantTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClientId = 1,
-                            GrantType = "client_credentials"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClientId = 1,
-                            GrantType = "password"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ClientId = 1,
-                            GrantType = "hybrid"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ClientId = 1,
-                            GrantType = "authorization_code"
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientIdPRestriction", b =>
@@ -631,14 +539,6 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasIndex("ClientId");
 
                     b.ToTable("ClientPostLogoutRedirectUris");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClientId = 1,
-                            PostLogoutRedirectUri = "http://localhost:5002/signout-callback-oidc"
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientProperty", b =>
@@ -688,14 +588,6 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasIndex("ClientId");
 
                     b.ToTable("ClientRedirectUris");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClientId = 1,
-                            RedirectUri = "http://localhost:5002/signin-oidc"
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientScope", b =>
@@ -718,26 +610,6 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasIndex("ClientId");
 
                     b.ToTable("ClientScopes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClientId = 1,
-                            Scope = "profile"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClientId = 1,
-                            Scope = "openid"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ClientId = 1,
-                            Scope = "timon"
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientSecret", b =>
@@ -775,16 +647,6 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasIndex("ClientId");
 
                     b.ToTable("ClientSecrets");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClientId = 1,
-                            Created = new DateTime(2020, 8, 13, 22, 35, 15, 103, DateTimeKind.Utc).AddTicks(4960),
-                            Type = "SharedSecret",
-                            Value = "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols="
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.IdentityResource", b =>
@@ -834,33 +696,6 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                         .IsUnique();
 
                     b.ToTable("IdentityResources");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Created = new DateTime(2020, 8, 13, 22, 35, 15, 102, DateTimeKind.Utc).AddTicks(6170),
-                            DisplayName = "Your user identifier",
-                            Emphasize = false,
-                            Enabled = true,
-                            Name = "openid",
-                            NonEditable = false,
-                            Required = true,
-                            ShowInDiscoveryDocument = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Created = new DateTime(2020, 8, 13, 22, 35, 15, 102, DateTimeKind.Utc).AddTicks(6920),
-                            Description = "Your user profile information (first name, last name, etc.)",
-                            DisplayName = "User profile",
-                            Emphasize = true,
-                            Enabled = true,
-                            Name = "profile",
-                            NonEditable = false,
-                            Required = false,
-                            ShowInDiscoveryDocument = true
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.IdentityResourceClaim", b =>
@@ -883,44 +718,6 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasIndex("IdentityResourceId");
 
                     b.ToTable("IdentityResourceClaims");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IdentityResourceId = 1,
-                            Type = "sub"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IdentityResourceId = 2,
-                            Type = "email"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IdentityResourceId = 2,
-                            Type = "website"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IdentityResourceId = 2,
-                            Type = "given_name"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IdentityResourceId = 2,
-                            Type = "family_name"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IdentityResourceId = 2,
-                            Type = "name"
-                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.IdentityResourceProperty", b =>

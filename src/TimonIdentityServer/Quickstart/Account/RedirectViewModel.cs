@@ -3,7 +3,7 @@
 
 
 
-namespace IdentityServerHost.Quickstart.UI
+namespace TimonIdentityServer.Quickstart.UI
 {
     public class RedirectViewModel
     {

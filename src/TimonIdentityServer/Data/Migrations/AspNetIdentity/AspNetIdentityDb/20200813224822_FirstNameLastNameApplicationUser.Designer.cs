@@ -10,8 +10,8 @@ using TimonIdentityServer.Data;
 namespace TimonIdentityServer.Data.Migrations.AspNetIdentity.AspNetIdentityDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200812174038_InitialIdentityDbMigration")]
-    partial class InitialIdentityDbMigration
+    [Migration("20200813224822_FirstNameLastNameApplicationUser")]
+    partial class FirstNameLastNameApplicationUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -71,7 +71,7 @@ namespace TimonIdentityServer.Data.Migrations.AspNetIdentity.AspNetIdentityDb
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,7 +95,7 @@ namespace TimonIdentityServer.Data.Migrations.AspNetIdentity.AspNetIdentityDb
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text");
@@ -117,7 +117,7 @@ namespace TimonIdentityServer.Data.Migrations.AspNetIdentity.AspNetIdentityDb
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -132,7 +132,7 @@ namespace TimonIdentityServer.Data.Migrations.AspNetIdentity.AspNetIdentityDb
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -169,6 +169,12 @@ namespace TimonIdentityServer.Data.Migrations.AspNetIdentity.AspNetIdentityDb
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -224,7 +230,7 @@ namespace TimonIdentityServer.Data.Migrations.AspNetIdentity.AspNetIdentityDb
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.HasOne("TimonIdentityServer.Models.ApplicationUser", null)
                         .WithMany()
@@ -233,7 +239,7 @@ namespace TimonIdentityServer.Data.Migrations.AspNetIdentity.AspNetIdentityDb
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.HasOne("TimonIdentityServer.Models.ApplicationUser", null)
                         .WithMany()
@@ -242,7 +248,7 @@ namespace TimonIdentityServer.Data.Migrations.AspNetIdentity.AspNetIdentityDb
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
@@ -257,7 +263,7 @@ namespace TimonIdentityServer.Data.Migrations.AspNetIdentity.AspNetIdentityDb
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.HasOne("TimonIdentityServer.Models.ApplicationUser", null)
                         .WithMany()

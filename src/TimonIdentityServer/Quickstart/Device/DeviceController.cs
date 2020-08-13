@@ -16,8 +16,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TimonIdentityServer.Quickstart;
+using TimonIdentityServer.Quickstart.Device;
 
-namespace IdentityServerHost.Quickstart.UI
+namespace TimonIdentityServer.Quickstart.UI
 {
     [Authorize]
     [SecurityHeaders]
