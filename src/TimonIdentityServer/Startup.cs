@@ -21,16 +21,15 @@ namespace TimonIdentityServer
 {
     public class Startup
     {
-
         public static void ConfigureAppConfiguration(IConfigurationBuilder config)
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
-            
+
             config.AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{environment}.json", optional: true)
                 .Build();
         }
-        
+
         public Startup(IHostEnvironment hosEnvironment, IConfiguration configuration)
         {
             HosEnvironment = hosEnvironment;
@@ -44,7 +43,12 @@ namespace TimonIdentityServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<IdentityServerOptions>(Configuration.GetSection(nameof(IdentityServerOptions)));
+            var identityServerConfigurationSection = Configuration.GetSection(nameof(IdentityServerOptions));
+
+            var identityServerOptions = new IdentityServerOptions();
+            identityServerConfigurationSection.Bind(identityServerOptions);
+
+            services.Configure<IdentityServerOptions>(identityServerConfigurationSection);
 
             services.AddControllersWithViews();
 
@@ -62,9 +66,7 @@ namespace TimonIdentityServer
                 {
                     options.SignIn.RequireConfirmedEmail = true;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultUI()
-                .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             var builder = services.AddIdentityServer(options =>
                 {
@@ -108,7 +110,7 @@ namespace TimonIdentityServer
             services.AddAuthentication()
                 .AddOpenIdConnect("oidc", config =>
                 {
-                    config.Authority = "https://localhost:5001";
+                    config.Authority = identityServerOptions.EndPoint;
                     config.ClientId = "client";
                     config.ClientSecret = "secret";
                     config.SaveTokens = true;
