@@ -31,12 +31,14 @@ RUN update-ca-certificates
 
 RUN openssl verify localhost.crt
 
+RUN ls
+
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS="http://*:8080;https://*:8443"
 #ENV ASPNETCORE_URLS="http://*:8080"
 EXPOSE 8080
 EXPOSE 8443
 
-RUN useradd -u 8877 docker
-USER docker
+#RUN useradd -u 8877 docker
+#USER docker
 ENTRYPOINT ["dotnet", "TimonIdentityServer.dll"]
