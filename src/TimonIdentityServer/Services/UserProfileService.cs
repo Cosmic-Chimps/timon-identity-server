@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
-using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using TimonIdentityServer.Models;
 
 namespace TimonIdentityServer.Services
@@ -28,7 +23,7 @@ namespace TimonIdentityServer.Services
 
             var claims = new List<Claim>
             {
-                new Claim("email", user.Email),
+                new Claim("email", user.Email)
             };
 
             context.IssuedClaims.AddRange(claims);
@@ -38,7 +33,7 @@ namespace TimonIdentityServer.Services
         {
             var user = await _userManager.GetUserAsync(context.Subject);
 
-            context.IsActive = (user != null);
+            context.IsActive = user != null;
         }
     }
 }

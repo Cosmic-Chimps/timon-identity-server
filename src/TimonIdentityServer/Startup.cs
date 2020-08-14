@@ -54,7 +54,7 @@ namespace TimonIdentityServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
-            
+
             var builder = services.AddIdentityServer(options =>
                 {
                     options.Events.RaiseErrorEvents = true;
@@ -78,7 +78,7 @@ namespace TimonIdentityServer
                 .AddProfileService<ProfileService>()
                 .AddJwtBearerClientAuthentication()
                 .AddAspNetIdentity<ApplicationUser>();
-            
+
             services.AddTransient<IProfileService, ProfileService>();
 
             if (Environment.IsDevelopment())
@@ -90,7 +90,7 @@ namespace TimonIdentityServer
                 var cert = new X509Certificate2(Path.Combine(Environment.ContentRootPath, "cert.pfx"), "");
                 builder.AddSigningCredential(cert);
             }
-                
+
 
             services.AddRazorPages();
 
@@ -115,7 +115,7 @@ namespace TimonIdentityServer
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
-            
+
             UpdateDatabase(app);
 
             app.UseStaticFiles();
@@ -130,7 +130,7 @@ namespace TimonIdentityServer
                 endpoints.MapRazorPages();
             });
         }
-        
+
         private static void UpdateDatabase(IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices
@@ -138,10 +138,10 @@ namespace TimonIdentityServer
                 .CreateScope();
             using var applicationDbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
             applicationDbContext.Database.Migrate();
-            
+
             using var configurationDbContext = serviceScope.ServiceProvider.GetService<ConfigurationDbContext>();
             configurationDbContext.Database.Migrate();
-            
+
             using var persistedGrantDbContext = serviceScope.ServiceProvider.GetService<PersistedGrantDbContext>();
             persistedGrantDbContext.Database.Migrate();
         }
