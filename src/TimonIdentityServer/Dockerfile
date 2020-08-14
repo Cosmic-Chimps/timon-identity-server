@@ -18,7 +18,7 @@ USER docker
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENV ASPNETCORE_ENVIRONMENT=Production
-ENV ASPNETCORE_URLS="http://*:8080;https://*:8433"
+ENV ASPNETCORE_URLS="http://*:8080;https://*:8443"
 EXPOSE 8080
-EXPOSE 8433
+EXPOSE 8443
 ENTRYPOINT ["dotnet", "TimonIdentityServer.dll"]
