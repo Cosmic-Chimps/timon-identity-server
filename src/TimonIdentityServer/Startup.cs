@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
@@ -20,13 +21,23 @@ namespace TimonIdentityServer
 {
     public class Startup
     {
-        public Startup(IHostEnvironment environment, IConfiguration configuration)
+
+        public static void ConfigureAppConfiguration(IConfigurationBuilder config)
         {
-            Environment = environment;
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+            
+            config.AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{environment}.json", optional: true)
+                .Build();
+        }
+        
+        public Startup(IHostEnvironment hosEnvironment, IConfiguration configuration)
+        {
+            HosEnvironment = hosEnvironment;
             Configuration = configuration;
         }
 
-        private IHostEnvironment Environment { get; }
+        private IHostEnvironment HosEnvironment { get; }
         private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -81,13 +92,13 @@ namespace TimonIdentityServer
 
             services.AddTransient<IProfileService, ProfileService>();
 
-            if (Environment.IsDevelopment())
+            if (HosEnvironment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential();
             }
             else
             {
-                var cert = new X509Certificate2(Path.Combine(Environment.ContentRootPath, "cert.pfx"), "");
+                var cert = new X509Certificate2(Path.Combine(HosEnvironment.ContentRootPath, "cert.pfx"), "");
                 builder.AddSigningCredential(cert);
             }
 
