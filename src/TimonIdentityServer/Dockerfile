@@ -33,6 +33,8 @@ RUN openssl verify localhost.crt
 
 RUN ls /etc/ssl/certs/localhost.pem
 
+RUN chmod 777 localhost.pfx
+
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS="http://*:8080;https://*:8443"
 #ENV ASPNETCORE_URLS="http://*:8080"
