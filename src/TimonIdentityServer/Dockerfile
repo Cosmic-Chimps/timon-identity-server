@@ -21,4 +21,6 @@ ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS="http://*:8080;https://*:8443"
 EXPOSE 8080
 EXPOSE 8443
+RUN dotnet dev-certs https --clean
+RUN dotnet dev-certs https --trust
 ENTRYPOINT ["dotnet", "TimonIdentityServer.dll"]
