@@ -1,9 +1,8 @@
-using System;
-using System.Linq;
+using System.IO;
 using System.Reflection;
-using IdentityServer4.Configuration;
+using System.Security.Cryptography.X509Certificates;
 using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Mappers;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -11,8 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TimonIdentityServer.Config;
 using TimonIdentityServer.Data;
 using TimonIdentityServer.Models;
+using TimonIdentityServer.Services;
+using ConfigurationDbContext = TimonIdentityServer.Data.ConfigurationDbContext;
 
 namespace TimonIdentityServer
 {
@@ -31,6 +33,8 @@ namespace TimonIdentityServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<IdentityServerOptions>(Configuration.GetSection(nameof(IdentityServerOptions)));
+
             services.AddControllersWithViews();
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
@@ -39,55 +43,72 @@ namespace TimonIdentityServer
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly))
             );
-            
-            services.AddDbContext<Data.ConfigurationDbContext>(options => options.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options => {
-                options.SignIn.RequireConfirmedEmail = true;
-            })
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultUI()
-            .AddDefaultTokenProviders();
+            services.AddDbContext<ConfigurationDbContext>(options =>
+                options.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
 
-            var builder = services.AddIdentityServer(options => {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
-                options.UserInteraction.LoginUrl = "/Account/Login";
-                options.UserInteraction.LogoutUrl = "/Account/Logout";
-                options.Authentication = new AuthenticationOptions
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
-                    CookieLifetime = TimeSpan.FromHours(10), // ID server cookie timeout set to 10 hours
-                    CookieSlidingExpiration = true
-                };
-            })
-            .AddConfigurationStore(options =>
-            {
-                options.ConfigureDbContext = b =>
-                    b.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
-            })
-            .AddOperationalStore(options =>
-            {
-                options.ConfigureDbContext = b =>
-                    b.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
-                options.EnableTokenCleanup = true;
-            })
-            .AddJwtBearerClientAuthentication()
-            .AddAspNetIdentity<ApplicationUser>();
+                    options.SignIn.RequireConfirmedEmail = true;
+                })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders();
             
+            var builder = services.AddIdentityServer(options =>
+                {
+                    options.Events.RaiseErrorEvents = true;
+                    options.Events.RaiseInformationEvents = true;
+                    options.Events.RaiseFailureEvents = true;
+                    options.Events.RaiseSuccessEvents = true;
+                    options.UserInteraction.LoginUrl = "/Account/Login";
+                    options.UserInteraction.LogoutUrl = "/Account/Logout";
+                })
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = b =>
+                        b.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+                })
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = b =>
+                        b.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+                    options.EnableTokenCleanup = true;
+                })
+                .AddProfileService<ProfileService>()
+                .AddJwtBearerClientAuthentication()
+                .AddAspNetIdentity<ApplicationUser>();
+            
+            services.AddTransient<IProfileService, ProfileService>();
+
             if (Environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential();
             }
             else
             {
-                throw new Exception("need to configure key material");
+                var cert = new X509Certificate2(Path.Combine(Environment.ContentRootPath, "cert.pfx"), "");
+                builder.AddSigningCredential(cert);
             }
-            
+                
+
             services.AddRazorPages();
 
-            services.AddAuthentication();
+            services.AddAuthentication()
+                .AddOpenIdConnect("oidc", config =>
+                {
+                    config.Authority = "https://localhost:5001";
+                    config.ClientId = "client";
+                    config.ClientSecret = "secret";
+                    config.SaveTokens = true;
+                    config.ResponseType = "code";
+
+                    config.Scope.Clear();
+                    config.Scope.Add("openid");
+                    config.Scope.Add("profile");
+                    config.Scope.Add("timon");
+                    config.Scope.Add("offline_access");
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,6 +116,8 @@ namespace TimonIdentityServer
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
             
+            UpdateDatabase(app);
+
             app.UseStaticFiles();
             app.UseRouting();
 
@@ -106,6 +129,21 @@ namespace TimonIdentityServer
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
             });
+        }
+        
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope();
+            using var applicationDbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+            applicationDbContext.Database.Migrate();
+            
+            using var configurationDbContext = serviceScope.ServiceProvider.GetService<ConfigurationDbContext>();
+            configurationDbContext.Database.Migrate();
+            
+            using var persistedGrantDbContext = serviceScope.ServiceProvider.GetService<PersistedGrantDbContext>();
+            persistedGrantDbContext.Database.Migrate();
         }
     }
 }

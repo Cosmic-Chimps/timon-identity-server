@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TimonIdentityServer.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace TimonIdentityServer.Data
 {

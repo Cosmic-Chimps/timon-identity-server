@@ -3,7 +3,6 @@
 
 
 using TimonIdentityServer.Quickstart.Consent;
-using TimonIdentityServer.Quickstart.UI;
 
 namespace TimonIdentityServer.Quickstart.Device
 {

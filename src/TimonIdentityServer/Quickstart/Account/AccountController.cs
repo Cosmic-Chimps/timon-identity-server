@@ -12,13 +12,13 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using TimonIdentityServer.Quickstart.UI;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TimonIdentityServer.Models;
-using Microsoft.AspNetCore.Http;
+using TimonIdentityServer.Quickstart.UI;
 
 namespace TimonIdentityServer.Quickstart.Account
 {
@@ -114,18 +114,17 @@ namespace TimonIdentityServer.Quickstart.Account
                 {
                     var user = await _userManager.FindByNameAsync(model.Username);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
-                    
+
                     // only set explicit expiration here if user chooses "remember me". 
                     // otherwise we rely upon expiration configured in cookie middleware.
                     AuthenticationProperties props = null;
                     if (AccountOptions.AllowRememberLogin && model.RememberLogin)
-                    {
                         props = new AuthenticationProperties
                         {
                             IsPersistent = true,
                             ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
                         };
-                    };
+                    ;
 
                     // issue authentication cookie with subject ID and username
                     var identityServerUser = new IdentityServerUser(user.Id)
@@ -147,16 +146,10 @@ namespace TimonIdentityServer.Quickstart.Account
                     }
 
                     // request for a local page
-                    if (Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
+                    if (Url.IsLocalUrl(model.ReturnUrl)) return Redirect(model.ReturnUrl);
 
-                    if (string.IsNullOrEmpty(model.ReturnUrl))
-                    {
-                        return Redirect("~/");
-                    }
-                    
+                    if (string.IsNullOrEmpty(model.ReturnUrl)) return Redirect("~/");
+
                     throw new Exception("invalid return URL");
                 }
 
@@ -263,7 +256,6 @@ namespace TimonIdentityServer.Quickstart.Account
 
             var allowLocal = true;
             if (context?.Client.ClientId == null)
-            {
                 return new LoginViewModel
                 {
                     AllowRememberLogin = AccountOptions.AllowRememberLogin,
@@ -272,8 +264,7 @@ namespace TimonIdentityServer.Quickstart.Account
                     Username = context?.LoginHint,
                     ExternalProviders = providers.ToArray()
                 };
-            }
-                
+
             var client = await _clientStore.FindEnabledClientByIdAsync(context.Client.ClientId);
             if (client == null)
                 return new LoginViewModel

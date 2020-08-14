@@ -1,13 +1,13 @@
 using System;
 using IdentityModel;
+using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Entities;
-using IdentityServer4.EntityFramework.Extensions;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.EntityFrameworkCore;
 
 namespace TimonIdentityServer.Data
 {
-    public class ConfigurationDbContext : IdentityServer4.EntityFramework.DbContexts.ConfigurationDbContext<
+    public class ConfigurationDbContext : ConfigurationDbContext<
         ConfigurationDbContext>
     {
         // private readonly ConfigurationStoreOptions _storeOptions;
@@ -21,10 +21,7 @@ namespace TimonIdentityServer.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
-            Console.WriteLine("Seed!!!!");
             ClientSeed(modelBuilder);
-            Console.WriteLine("Done!!!!");
         }
 
         private void ClientSeed(ModelBuilder builder)
@@ -49,13 +46,13 @@ namespace TimonIdentityServer.Data
                         Description = null,
                         Required = false,
                         Emphasize = false,
-                        ShowInDiscoveryDocument = true,
+                        ShowInDiscoveryDocument = true
                     }
                 );
 
             builder.Entity<IdentityResource>().HasData
             (
-                new IdentityResource()
+                new IdentityResource
                 {
                     Id = 1,
                     Enabled = true,
@@ -69,7 +66,7 @@ namespace TimonIdentityServer.Data
                     Updated = null,
                     NonEditable = false
                 },
-                new IdentityResource()
+                new IdentityResource
                 {
                     Id = 2,
                     Enabled = true,
@@ -132,14 +129,14 @@ namespace TimonIdentityServer.Data
                         ClientId = "client",
                         ProtocolType = "oidc",
                         RequireClientSecret = true,
-                        RequireConsent = true,
+                        RequireConsent = false,
                         ClientName = null,
                         Description = null,
                         AllowRememberConsent = true,
-                        AlwaysIncludeUserClaimsInIdToken = false,
+                        AlwaysIncludeUserClaimsInIdToken = true,
                         RequirePkce = false,
                         AllowAccessTokensViaBrowser = false,
-                        AllowOfflineAccess = false
+                        AllowOfflineAccess = true
                     });
 
             builder.Entity<ClientGrantType>()
@@ -182,6 +179,12 @@ namespace TimonIdentityServer.Data
                         Id = 3,
                         Scope = "timon",
                         ClientId = 1
+                    },
+                    new ClientScope
+                    {
+                        Id = 4,
+                        Scope = "offline_access",
+                        ClientId = 1
                     });
 
             builder.Entity<ClientSecret>()
@@ -220,7 +223,6 @@ namespace TimonIdentityServer.Data
                         Origin = "http://localhost:5003",
                         ClientId = 1
                     });
-            
         }
     }
 }
