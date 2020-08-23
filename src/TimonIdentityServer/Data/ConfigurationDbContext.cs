@@ -49,6 +49,26 @@ namespace TimonIdentityServer.Data
                         ShowInDiscoveryDocument = true
                     }
                 );
+            
+            builder.Entity<ApiResourceClaim>()
+                .HasData(
+                    new ApiResourceClaim
+                    {
+                        Id = 1,
+                        ApiResourceId = 1,
+                        Type = JwtClaimTypes.Audience
+                    }
+                );
+            
+            builder.Entity<ApiResourceScope>()
+                .HasData(
+                    new ApiResourceScope()
+                    {
+                        Id = 1,
+                        ApiResourceId = 1,
+                        Scope = "timon"
+                    }
+                );
 
             builder.Entity<IdentityResource>().HasData
             (
@@ -126,7 +146,7 @@ namespace TimonIdentityServer.Data
                     {
                         Id = 1,
                         Enabled = true,
-                        ClientId = "client",
+                        ClientId = "timon",
                         ProtocolType = "oidc",
                         RequireClientSecret = true,
                         RequireConsent = false,

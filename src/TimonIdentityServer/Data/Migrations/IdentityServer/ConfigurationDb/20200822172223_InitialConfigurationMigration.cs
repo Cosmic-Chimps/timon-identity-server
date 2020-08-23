@@ -4,17 +4,16 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
 {
-    public partial class InitialConfigurationDbMigration : Migration
+    public partial class InitialConfigurationMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                "ApiResources",
-                table => new
+                name: "ApiResources",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Enabled = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
@@ -26,15 +25,17 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     LastAccessed = table.Column<DateTime>(nullable: true),
                     NonEditable = table.Column<bool>(nullable: false)
                 },
-                constraints: table => { table.PrimaryKey("PK_ApiResources", x => x.Id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiResources", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
-                "ApiScopes",
-                table => new
+                name: "ApiScopes",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Enabled = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
@@ -43,15 +44,17 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     Emphasize = table.Column<bool>(nullable: false),
                     ShowInDiscoveryDocument = table.Column<bool>(nullable: false)
                 },
-                constraints: table => { table.PrimaryKey("PK_ApiScopes", x => x.Id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiScopes", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
-                "Clients",
-                table => new
+                name: "Clients",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Enabled = table.Column<bool>(nullable: false),
                     ClientId = table.Column<string>(maxLength: 200, nullable: false),
                     ProtocolType = table.Column<string>(maxLength: 200, nullable: false),
@@ -96,15 +99,17 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     DeviceCodeLifetime = table.Column<int>(nullable: false),
                     NonEditable = table.Column<bool>(nullable: false)
                 },
-                constraints: table => { table.PrimaryKey("PK_Clients", x => x.Id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clients", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
-                "IdentityResources",
-                table => new
+                name: "IdentityResources",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Enabled = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
@@ -116,15 +121,17 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     Updated = table.Column<DateTime>(nullable: true),
                     NonEditable = table.Column<bool>(nullable: false)
                 },
-                constraints: table => { table.PrimaryKey("PK_IdentityResources", x => x.Id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityResources", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
-                "ApiResourceClaims",
-                table => new
+                name: "ApiResourceClaims",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Type = table.Column<string>(maxLength: 200, nullable: false),
                     ApiResourceId = table.Column<int>(nullable: false)
                 },
@@ -132,20 +139,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ApiResourceClaims", x => x.Id);
                     table.ForeignKey(
-                        "FK_ApiResourceClaims_ApiResources_ApiResourceId",
-                        x => x.ApiResourceId,
-                        "ApiResources",
-                        "Id",
+                        name: "FK_ApiResourceClaims_ApiResources_ApiResourceId",
+                        column: x => x.ApiResourceId,
+                        principalTable: "ApiResources",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ApiResourceProperties",
-                table => new
+                name: "ApiResourceProperties",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Key = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(maxLength: 2000, nullable: false),
                     ApiResourceId = table.Column<int>(nullable: false)
@@ -154,20 +160,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ApiResourceProperties", x => x.Id);
                     table.ForeignKey(
-                        "FK_ApiResourceProperties_ApiResources_ApiResourceId",
-                        x => x.ApiResourceId,
-                        "ApiResources",
-                        "Id",
+                        name: "FK_ApiResourceProperties_ApiResources_ApiResourceId",
+                        column: x => x.ApiResourceId,
+                        principalTable: "ApiResources",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ApiResourceScopes",
-                table => new
+                name: "ApiResourceScopes",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Scope = table.Column<string>(maxLength: 200, nullable: false),
                     ApiResourceId = table.Column<int>(nullable: false)
                 },
@@ -175,20 +180,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ApiResourceScopes", x => x.Id);
                     table.ForeignKey(
-                        "FK_ApiResourceScopes_ApiResources_ApiResourceId",
-                        x => x.ApiResourceId,
-                        "ApiResources",
-                        "Id",
+                        name: "FK_ApiResourceScopes_ApiResources_ApiResourceId",
+                        column: x => x.ApiResourceId,
+                        principalTable: "ApiResources",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ApiResourceSecrets",
-                table => new
+                name: "ApiResourceSecrets",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Value = table.Column<string>(maxLength: 4000, nullable: false),
                     Expiration = table.Column<DateTime>(nullable: true),
@@ -200,20 +204,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ApiResourceSecrets", x => x.Id);
                     table.ForeignKey(
-                        "FK_ApiResourceSecrets_ApiResources_ApiResourceId",
-                        x => x.ApiResourceId,
-                        "ApiResources",
-                        "Id",
+                        name: "FK_ApiResourceSecrets_ApiResources_ApiResourceId",
+                        column: x => x.ApiResourceId,
+                        principalTable: "ApiResources",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ApiScopeClaims",
-                table => new
+                name: "ApiScopeClaims",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Type = table.Column<string>(maxLength: 200, nullable: false),
                     ScopeId = table.Column<int>(nullable: false)
                 },
@@ -221,20 +224,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ApiScopeClaims", x => x.Id);
                     table.ForeignKey(
-                        "FK_ApiScopeClaims_ApiScopes_ScopeId",
-                        x => x.ScopeId,
-                        "ApiScopes",
-                        "Id",
+                        name: "FK_ApiScopeClaims_ApiScopes_ScopeId",
+                        column: x => x.ScopeId,
+                        principalTable: "ApiScopes",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ApiScopeProperties",
-                table => new
+                name: "ApiScopeProperties",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Key = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(maxLength: 2000, nullable: false),
                     ScopeId = table.Column<int>(nullable: false)
@@ -243,20 +245,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ApiScopeProperties", x => x.Id);
                     table.ForeignKey(
-                        "FK_ApiScopeProperties_ApiScopes_ScopeId",
-                        x => x.ScopeId,
-                        "ApiScopes",
-                        "Id",
+                        name: "FK_ApiScopeProperties_ApiScopes_ScopeId",
+                        column: x => x.ScopeId,
+                        principalTable: "ApiScopes",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ClientClaims",
-                table => new
+                name: "ClientClaims",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Type = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(maxLength: 250, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
@@ -265,20 +266,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientClaims", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientClaims_Clients_ClientId",
-                        x => x.ClientId,
-                        "Clients",
-                        "Id",
+                        name: "FK_ClientClaims_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ClientCorsOrigins",
-                table => new
+                name: "ClientCorsOrigins",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Origin = table.Column<string>(maxLength: 150, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
@@ -286,20 +286,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientCorsOrigins", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientCorsOrigins_Clients_ClientId",
-                        x => x.ClientId,
-                        "Clients",
-                        "Id",
+                        name: "FK_ClientCorsOrigins_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ClientGrantTypes",
-                table => new
+                name: "ClientGrantTypes",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     GrantType = table.Column<string>(maxLength: 250, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
@@ -307,20 +306,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientGrantTypes", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientGrantTypes_Clients_ClientId",
-                        x => x.ClientId,
-                        "Clients",
-                        "Id",
+                        name: "FK_ClientGrantTypes_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ClientIdPRestrictions",
-                table => new
+                name: "ClientIdPRestrictions",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Provider = table.Column<string>(maxLength: 200, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
@@ -328,20 +326,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientIdPRestrictions", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientIdPRestrictions_Clients_ClientId",
-                        x => x.ClientId,
-                        "Clients",
-                        "Id",
+                        name: "FK_ClientIdPRestrictions_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ClientPostLogoutRedirectUris",
-                table => new
+                name: "ClientPostLogoutRedirectUris",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PostLogoutRedirectUri = table.Column<string>(maxLength: 2000, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
@@ -349,20 +346,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientPostLogoutRedirectUris", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientPostLogoutRedirectUris_Clients_ClientId",
-                        x => x.ClientId,
-                        "Clients",
-                        "Id",
+                        name: "FK_ClientPostLogoutRedirectUris_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ClientProperties",
-                table => new
+                name: "ClientProperties",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Key = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(maxLength: 2000, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
@@ -371,20 +367,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientProperties", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientProperties_Clients_ClientId",
-                        x => x.ClientId,
-                        "Clients",
-                        "Id",
+                        name: "FK_ClientProperties_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ClientRedirectUris",
-                table => new
+                name: "ClientRedirectUris",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     RedirectUri = table.Column<string>(maxLength: 2000, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
@@ -392,20 +387,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientRedirectUris", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientRedirectUris_Clients_ClientId",
-                        x => x.ClientId,
-                        "Clients",
-                        "Id",
+                        name: "FK_ClientRedirectUris_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ClientScopes",
-                table => new
+                name: "ClientScopes",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Scope = table.Column<string>(maxLength: 200, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
@@ -413,20 +407,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientScopes", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientScopes_Clients_ClientId",
-                        x => x.ClientId,
-                        "Clients",
-                        "Id",
+                        name: "FK_ClientScopes_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "ClientSecrets",
-                table => new
+                name: "ClientSecrets",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Description = table.Column<string>(maxLength: 2000, nullable: true),
                     Value = table.Column<string>(maxLength: 4000, nullable: false),
                     Expiration = table.Column<DateTime>(nullable: true),
@@ -438,20 +431,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ClientSecrets", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientSecrets_Clients_ClientId",
-                        x => x.ClientId,
-                        "Clients",
-                        "Id",
+                        name: "FK_ClientSecrets_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "IdentityResourceClaims",
-                table => new
+                name: "IdentityResourceClaims",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Type = table.Column<string>(maxLength: 200, nullable: false),
                     IdentityResourceId = table.Column<int>(nullable: false)
                 },
@@ -459,20 +451,19 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_IdentityResourceClaims", x => x.Id);
                     table.ForeignKey(
-                        "FK_IdentityResourceClaims_IdentityResources_IdentityResourceId",
-                        x => x.IdentityResourceId,
-                        "IdentityResources",
-                        "Id",
+                        name: "FK_IdentityResourceClaims_IdentityResources_IdentityResourceId",
+                        column: x => x.IdentityResourceId,
+                        principalTable: "IdentityResources",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                "IdentityResourceProperties",
-                table => new
+                name: "IdentityResourceProperties",
+                columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Key = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(maxLength: 2000, nullable: false),
                     IdentityResourceId = table.Column<int>(nullable: false)
@@ -481,187 +472,275 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                 {
                     table.PrimaryKey("PK_IdentityResourceProperties", x => x.Id);
                     table.ForeignKey(
-                        "FK_IdentityResourceProperties_IdentityResources_IdentityResour~",
-                        x => x.IdentityResourceId,
-                        "IdentityResources",
-                        "Id",
+                        name: "FK_IdentityResourceProperties_IdentityResources_IdentityResour~",
+                        column: x => x.IdentityResourceId,
+                        principalTable: "IdentityResources",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                "IX_ApiResourceClaims_ApiResourceId",
-                "ApiResourceClaims",
-                "ApiResourceId");
+            migrationBuilder.InsertData(
+                table: "ApiResources",
+                columns: new[] { "Id", "AllowedAccessTokenSigningAlgorithms", "Created", "Description", "DisplayName", "Enabled", "LastAccessed", "Name", "NonEditable", "ShowInDiscoveryDocument", "Updated" },
+                values: new object[] { 1, null, new DateTime(2020, 8, 22, 17, 22, 23, 290, DateTimeKind.Utc).AddTicks(5570), null, "Timon", true, null, "timon", false, true, null });
+
+            migrationBuilder.InsertData(
+                table: "ApiScopes",
+                columns: new[] { "Id", "Description", "DisplayName", "Emphasize", "Enabled", "Name", "Required", "ShowInDiscoveryDocument" },
+                values: new object[] { 1, null, "timon", false, true, "timon", false, true });
+
+            migrationBuilder.InsertData(
+                table: "Clients",
+                columns: new[] { "Id", "AbsoluteRefreshTokenLifetime", "AccessTokenLifetime", "AccessTokenType", "AllowAccessTokensViaBrowser", "AllowOfflineAccess", "AllowPlainTextPkce", "AllowRememberConsent", "AllowedIdentityTokenSigningAlgorithms", "AlwaysIncludeUserClaimsInIdToken", "AlwaysSendClientClaims", "AuthorizationCodeLifetime", "BackChannelLogoutSessionRequired", "BackChannelLogoutUri", "ClientClaimsPrefix", "ClientId", "ClientName", "ClientUri", "ConsentLifetime", "Created", "Description", "DeviceCodeLifetime", "EnableLocalLogin", "Enabled", "FrontChannelLogoutSessionRequired", "FrontChannelLogoutUri", "IdentityTokenLifetime", "IncludeJwtId", "LastAccessed", "LogoUri", "NonEditable", "PairWiseSubjectSalt", "ProtocolType", "RefreshTokenExpiration", "RefreshTokenUsage", "RequireClientSecret", "RequireConsent", "RequirePkce", "RequireRequestObject", "SlidingRefreshTokenLifetime", "UpdateAccessTokenClaimsOnRefresh", "Updated", "UserCodeType", "UserSsoLifetime" },
+                values: new object[] { 1, 2592000, 3600, 0, false, true, false, true, null, true, false, 300, true, null, "client_", "timon", null, null, null, new DateTime(2020, 8, 22, 17, 22, 23, 292, DateTimeKind.Utc).AddTicks(7970), null, 300, true, true, true, null, 300, false, null, null, false, null, "oidc", 1, 1, true, false, false, false, 1296000, false, null, null, null });
+
+            migrationBuilder.InsertData(
+                table: "IdentityResources",
+                columns: new[] { "Id", "Created", "Description", "DisplayName", "Emphasize", "Enabled", "Name", "NonEditable", "Required", "ShowInDiscoveryDocument", "Updated" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2020, 8, 22, 17, 22, 23, 292, DateTimeKind.Utc).AddTicks(5770), null, "Your user identifier", false, true, "openid", false, true, true, null },
+                    { 2, new DateTime(2020, 8, 22, 17, 22, 23, 292, DateTimeKind.Utc).AddTicks(6550), "Your user profile information (first name, last name, etc.)", "User profile", true, true, "profile", false, false, true, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ApiResourceClaims",
+                columns: new[] { "Id", "ApiResourceId", "Type" },
+                values: new object[] { 1, 1, "aud" });
+
+            migrationBuilder.InsertData(
+                table: "ApiResourceScopes",
+                columns: new[] { "Id", "ApiResourceId", "Scope" },
+                values: new object[] { 1, 1, "timon" });
+
+            migrationBuilder.InsertData(
+                table: "ClientCorsOrigins",
+                columns: new[] { "Id", "ClientId", "Origin" },
+                values: new object[] { 1, 1, "http://localhost:5003" });
+
+            migrationBuilder.InsertData(
+                table: "ClientGrantTypes",
+                columns: new[] { "Id", "ClientId", "GrantType" },
+                values: new object[,]
+                {
+                    { 1, 1, "client_credentials" },
+                    { 2, 1, "password" },
+                    { 3, 1, "authorization_code" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ClientPostLogoutRedirectUris",
+                columns: new[] { "Id", "ClientId", "PostLogoutRedirectUri" },
+                values: new object[] { 1, 1, "http://localhost:5002/signout-callback-oidc" });
+
+            migrationBuilder.InsertData(
+                table: "ClientRedirectUris",
+                columns: new[] { "Id", "ClientId", "RedirectUri" },
+                values: new object[] { 1, 1, "http://localhost:5002/signin-oidc" });
+
+            migrationBuilder.InsertData(
+                table: "ClientScopes",
+                columns: new[] { "Id", "ClientId", "Scope" },
+                values: new object[,]
+                {
+                    { 4, 1, "offline_access" },
+                    { 3, 1, "timon" },
+                    { 2, 1, "openid" },
+                    { 1, 1, "profile" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ClientSecrets",
+                columns: new[] { "Id", "ClientId", "Created", "Description", "Expiration", "Type", "Value" },
+                values: new object[] { 1, 1, new DateTime(2020, 8, 22, 17, 22, 23, 293, DateTimeKind.Utc).AddTicks(3230), null, null, "SharedSecret", "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=" });
+
+            migrationBuilder.InsertData(
+                table: "IdentityResourceClaims",
+                columns: new[] { "Id", "IdentityResourceId", "Type" },
+                values: new object[,]
+                {
+                    { 1, 1, "sub" },
+                    { 2, 2, "email" },
+                    { 3, 2, "website" },
+                    { 4, 2, "given_name" },
+                    { 5, 2, "family_name" },
+                    { 6, 2, "name" }
+                });
 
             migrationBuilder.CreateIndex(
-                "IX_ApiResourceProperties_ApiResourceId",
-                "ApiResourceProperties",
-                "ApiResourceId");
+                name: "IX_ApiResourceClaims_ApiResourceId",
+                table: "ApiResourceClaims",
+                column: "ApiResourceId");
 
             migrationBuilder.CreateIndex(
-                "IX_ApiResources_Name",
-                "ApiResources",
-                "Name",
+                name: "IX_ApiResourceProperties_ApiResourceId",
+                table: "ApiResourceProperties",
+                column: "ApiResourceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApiResources_Name",
+                table: "ApiResources",
+                column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                "IX_ApiResourceScopes_ApiResourceId",
-                "ApiResourceScopes",
-                "ApiResourceId");
+                name: "IX_ApiResourceScopes_ApiResourceId",
+                table: "ApiResourceScopes",
+                column: "ApiResourceId");
 
             migrationBuilder.CreateIndex(
-                "IX_ApiResourceSecrets_ApiResourceId",
-                "ApiResourceSecrets",
-                "ApiResourceId");
+                name: "IX_ApiResourceSecrets_ApiResourceId",
+                table: "ApiResourceSecrets",
+                column: "ApiResourceId");
 
             migrationBuilder.CreateIndex(
-                "IX_ApiScopeClaims_ScopeId",
-                "ApiScopeClaims",
-                "ScopeId");
+                name: "IX_ApiScopeClaims_ScopeId",
+                table: "ApiScopeClaims",
+                column: "ScopeId");
 
             migrationBuilder.CreateIndex(
-                "IX_ApiScopeProperties_ScopeId",
-                "ApiScopeProperties",
-                "ScopeId");
+                name: "IX_ApiScopeProperties_ScopeId",
+                table: "ApiScopeProperties",
+                column: "ScopeId");
 
             migrationBuilder.CreateIndex(
-                "IX_ApiScopes_Name",
-                "ApiScopes",
-                "Name",
+                name: "IX_ApiScopes_Name",
+                table: "ApiScopes",
+                column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                "IX_ClientClaims_ClientId",
-                "ClientClaims",
-                "ClientId");
+                name: "IX_ClientClaims_ClientId",
+                table: "ClientClaims",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientCorsOrigins_ClientId",
-                "ClientCorsOrigins",
-                "ClientId");
+                name: "IX_ClientCorsOrigins_ClientId",
+                table: "ClientCorsOrigins",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientGrantTypes_ClientId",
-                "ClientGrantTypes",
-                "ClientId");
+                name: "IX_ClientGrantTypes_ClientId",
+                table: "ClientGrantTypes",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientIdPRestrictions_ClientId",
-                "ClientIdPRestrictions",
-                "ClientId");
+                name: "IX_ClientIdPRestrictions_ClientId",
+                table: "ClientIdPRestrictions",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientPostLogoutRedirectUris_ClientId",
-                "ClientPostLogoutRedirectUris",
-                "ClientId");
+                name: "IX_ClientPostLogoutRedirectUris_ClientId",
+                table: "ClientPostLogoutRedirectUris",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientProperties_ClientId",
-                "ClientProperties",
-                "ClientId");
+                name: "IX_ClientProperties_ClientId",
+                table: "ClientProperties",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientRedirectUris_ClientId",
-                "ClientRedirectUris",
-                "ClientId");
+                name: "IX_ClientRedirectUris_ClientId",
+                table: "ClientRedirectUris",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_Clients_ClientId",
-                "Clients",
-                "ClientId",
+                name: "IX_Clients_ClientId",
+                table: "Clients",
+                column: "ClientId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                "IX_ClientScopes_ClientId",
-                "ClientScopes",
-                "ClientId");
+                name: "IX_ClientScopes_ClientId",
+                table: "ClientScopes",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientSecrets_ClientId",
-                "ClientSecrets",
-                "ClientId");
+                name: "IX_ClientSecrets_ClientId",
+                table: "ClientSecrets",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_IdentityResourceClaims_IdentityResourceId",
-                "IdentityResourceClaims",
-                "IdentityResourceId");
+                name: "IX_IdentityResourceClaims_IdentityResourceId",
+                table: "IdentityResourceClaims",
+                column: "IdentityResourceId");
 
             migrationBuilder.CreateIndex(
-                "IX_IdentityResourceProperties_IdentityResourceId",
-                "IdentityResourceProperties",
-                "IdentityResourceId");
+                name: "IX_IdentityResourceProperties_IdentityResourceId",
+                table: "IdentityResourceProperties",
+                column: "IdentityResourceId");
 
             migrationBuilder.CreateIndex(
-                "IX_IdentityResources_Name",
-                "IdentityResources",
-                "Name",
+                name: "IX_IdentityResources_Name",
+                table: "IdentityResources",
+                column: "Name",
                 unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                "ApiResourceClaims");
+                name: "ApiResourceClaims");
 
             migrationBuilder.DropTable(
-                "ApiResourceProperties");
+                name: "ApiResourceProperties");
 
             migrationBuilder.DropTable(
-                "ApiResourceScopes");
+                name: "ApiResourceScopes");
 
             migrationBuilder.DropTable(
-                "ApiResourceSecrets");
+                name: "ApiResourceSecrets");
 
             migrationBuilder.DropTable(
-                "ApiScopeClaims");
+                name: "ApiScopeClaims");
 
             migrationBuilder.DropTable(
-                "ApiScopeProperties");
+                name: "ApiScopeProperties");
 
             migrationBuilder.DropTable(
-                "ClientClaims");
+                name: "ClientClaims");
 
             migrationBuilder.DropTable(
-                "ClientCorsOrigins");
+                name: "ClientCorsOrigins");
 
             migrationBuilder.DropTable(
-                "ClientGrantTypes");
+                name: "ClientGrantTypes");
 
             migrationBuilder.DropTable(
-                "ClientIdPRestrictions");
+                name: "ClientIdPRestrictions");
 
             migrationBuilder.DropTable(
-                "ClientPostLogoutRedirectUris");
+                name: "ClientPostLogoutRedirectUris");
 
             migrationBuilder.DropTable(
-                "ClientProperties");
+                name: "ClientProperties");
 
             migrationBuilder.DropTable(
-                "ClientRedirectUris");
+                name: "ClientRedirectUris");
 
             migrationBuilder.DropTable(
-                "ClientScopes");
+                name: "ClientScopes");
 
             migrationBuilder.DropTable(
-                "ClientSecrets");
+                name: "ClientSecrets");
 
             migrationBuilder.DropTable(
-                "IdentityResourceClaims");
+                name: "IdentityResourceClaims");
 
             migrationBuilder.DropTable(
-                "IdentityResourceProperties");
+                name: "IdentityResourceProperties");
 
             migrationBuilder.DropTable(
-                "ApiResources");
+                name: "ApiResources");
 
             migrationBuilder.DropTable(
-                "ApiScopes");
+                name: "ApiScopes");
 
             migrationBuilder.DropTable(
-                "Clients");
+                name: "Clients");
 
             migrationBuilder.DropTable(
-                "IdentityResources");
+                name: "IdentityResources");
         }
     }
 }

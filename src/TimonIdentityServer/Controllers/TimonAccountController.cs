@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using IdentityModel;
 using IdentityModel.Client;
 using IdentityServer4;
 using IdentityServer4.Events;
@@ -96,7 +97,7 @@ namespace TimonIdentityServer.Controllers
         {
             var serverClient = _httpClientFactory.CreateClient();
             var discoveryDocument = await serverClient.GetDiscoveryDocumentAsync(_identityServerOptions.Value.EndPoint);
-
+            
             var tokenResponse = await serverClient.RequestPasswordTokenAsync(
                 new PasswordTokenRequest
                 {

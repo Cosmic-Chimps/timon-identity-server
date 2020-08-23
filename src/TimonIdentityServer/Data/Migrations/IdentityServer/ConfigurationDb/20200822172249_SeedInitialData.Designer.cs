@@ -10,7 +10,7 @@ using TimonIdentityServer.Data;
 namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
-    [Migration("20200814181249_SeedInitialData")]
+    [Migration("20200822172249_SeedInitialData")]
     partial class SeedInitialData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,7 +74,7 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2020, 8, 14, 18, 12, 48, 617, DateTimeKind.Utc).AddTicks(9130),
+                            Created = new DateTime(2020, 8, 22, 17, 22, 49, 134, DateTimeKind.Utc).AddTicks(6950),
                             DisplayName = "Timon",
                             Enabled = true,
                             Name = "timon",
@@ -103,6 +103,14 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasIndex("ApiResourceId");
 
                     b.ToTable("ApiResourceClaims");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ApiResourceId = 1,
+                            Type = "aud"
+                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiResourceProperty", b =>
@@ -152,6 +160,14 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasIndex("ApiResourceId");
 
                     b.ToTable("ApiResourceScopes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ApiResourceId = 1,
+                            Scope = "timon"
+                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiResourceSecret", b =>
@@ -465,8 +481,8 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                             AuthorizationCodeLifetime = 300,
                             BackChannelLogoutSessionRequired = true,
                             ClientClaimsPrefix = "client_",
-                            ClientId = "client",
-                            Created = new DateTime(2020, 8, 14, 18, 12, 48, 619, DateTimeKind.Utc).AddTicks(5080),
+                            ClientId = "timon",
+                            Created = new DateTime(2020, 8, 22, 17, 22, 49, 136, DateTimeKind.Utc).AddTicks(6890),
                             DeviceCodeLifetime = 300,
                             EnableLocalLogin = true,
                             Enabled = true,
@@ -783,7 +799,7 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                         {
                             Id = 1,
                             ClientId = 1,
-                            Created = new DateTime(2020, 8, 14, 18, 12, 48, 620, DateTimeKind.Utc).AddTicks(440),
+                            Created = new DateTime(2020, 8, 22, 17, 22, 49, 137, DateTimeKind.Utc).AddTicks(2460),
                             Type = "SharedSecret",
                             Value = "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols="
                         });
@@ -841,7 +857,7 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2020, 8, 14, 18, 12, 48, 619, DateTimeKind.Utc).AddTicks(2340),
+                            Created = new DateTime(2020, 8, 22, 17, 22, 49, 136, DateTimeKind.Utc).AddTicks(4660),
                             DisplayName = "Your user identifier",
                             Emphasize = false,
                             Enabled = true,
@@ -853,7 +869,7 @@ namespace TimonIdentityServer.Data.Migrations.IdentityServer.ConfigurationDb
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2020, 8, 14, 18, 12, 48, 619, DateTimeKind.Utc).AddTicks(3080),
+                            Created = new DateTime(2020, 8, 22, 17, 22, 49, 136, DateTimeKind.Utc).AddTicks(5440),
                             Description = "Your user profile information (first name, last name, etc.)",
                             DisplayName = "User profile",
                             Emphasize = true,

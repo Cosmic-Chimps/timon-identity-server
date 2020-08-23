@@ -111,7 +111,7 @@ namespace TimonIdentityServer
                 .AddOpenIdConnect("oidc", config =>
                 {
                     config.Authority = identityServerOptions.EndPoint;
-                    config.ClientId = "client";
+                    config.ClientId = "timon";
                     config.ClientSecret = "secret";
                     config.SaveTokens = true;
                     config.ResponseType = "code";
