@@ -100,8 +100,10 @@ namespace TimonIdentityServer
             }
             else
             {
-                var cert = new X509Certificate2(Path.Combine(HosEnvironment.ContentRootPath, "cert.pfx"), "");
-                builder.AddSigningCredential(cert);
+                var cert = new X509Certificate2(Path.Combine(HosEnvironment.ContentRootPath, "localhost.pfx"), "");
+                var cert2 = new X509Certificate2(Path.Combine(HosEnvironment.ContentRootPath, "localhost2.pfx"), "");
+                builder.AddSigningCredential(cert)
+                    .AddSigningCredential(cert2); 
             }
 
 
