@@ -61,6 +61,6 @@ ENV ASPNETCORE_URLS="http://*:8080;https://*:8443"
 EXPOSE 8080
 EXPOSE 8443
 
-RUN useradd -u 8877 docker
-USER docker
+#RUN useradd -u 8877 docker
+#USER docker
 ENTRYPOINT ["dotnet", "TimonIdentityServer.dll"]
