@@ -19,7 +19,7 @@ COPY --from=publish /app/publish .
 
 #RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -config localhost.conf
 
-RUN openssl req -x509 -nodes -new -days 1024 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -subj "/C=US/CN=*"
+RUN openssl req -x509 -nodes -new -days 1024 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -subj "/C=US/CN=localhost"
 RUN openssl pkcs12 -passout pass: -export -out localhost.pfx -inkey localhost.key -in localhost.crt
 
 RUN openssl verify -CAfile localhost.crt localhost.crt
@@ -34,6 +34,22 @@ RUN openssl verify localhost.crt
 RUN ls /etc/ssl/certs/localhost.pem
 
 RUN chmod 777 localhost.pfx
+
+RUN openssl req -x509 -nodes -new -days 1024 -newkey rsa:2048 -keyout localhost2.key -out localhost2.crt -subj "/C=US/CN=timon-identity-server.openfaas-fn.svc"
+RUN openssl pkcs12 -passout pass: -export -out localhost2.pfx -inkey localhost2.key -in localhost2.crt
+
+RUN openssl verify -CAfile localhost2.crt localhost2.crt
+
+#RUN openssl verify localhost.crt
+
+RUN cp localhost2.crt /usr/local/share/ca-certificates
+RUN update-ca-certificates
+
+RUN openssl verify localhost2.crt
+
+RUN ls /etc/ssl/certs/localhost2.pem
+
+RUN chmod 777 localhost2.pfx
 
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS="http://*:8080;https://*:8443"
