@@ -19,7 +19,7 @@ COPY --from=publish /app/publish .
 
 #RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -config localhost.conf
 
-RUN openssl req -x509 -nodes -new -days 1024 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -subj "/C=US/CN=localhost"
+RUN openssl req -x509 -nodes -new -days 1024 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -subj "/C=US/CN=*"
 RUN openssl pkcs12 -passout pass: -export -out localhost.pfx -inkey localhost.key -in localhost.crt
 
 RUN openssl verify -CAfile localhost.crt localhost.crt
