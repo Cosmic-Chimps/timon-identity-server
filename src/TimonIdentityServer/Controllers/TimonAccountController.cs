@@ -93,11 +93,37 @@ namespace TimonIdentityServer.Controllers
             return await GetTokenAsync(user, to.Password);
         }
 
+        [HttpPost("/refresh-token")]
+        public async Task<IActionResult> RenewToken([FromBody] RefreshTokenTo to)
+        {
+            var serverClient = _httpClientFactory.CreateClient();
+            var discoveryDocument = await serverClient.GetDiscoveryDocumentAsync(_identityServerOptions.Value.EndPoint);
+
+            var tokenResponse = await serverClient.RequestRefreshTokenAsync(
+                new RefreshTokenRequest()
+                {
+                    Address = discoveryDocument.TokenEndpoint,
+                    ClientId = _identityServerOptions.Value.ClientId,
+                    ClientSecret = _identityServerOptions.Value.ClientSecret,
+                    GrantType = "refresh_token",
+                    RefreshToken = to.RefreshToken
+                });
+
+            return Json(new TokenViewModel
+            {
+                Scope = tokenResponse.Scope,
+                AccessToken = tokenResponse.AccessToken,
+                ExpiresIn = tokenResponse.ExpiresIn,
+                RefreshToken = tokenResponse.RefreshToken,
+                TokenType = tokenResponse.TokenType
+            });
+        }
+
         private async Task<IActionResult> GetTokenAsync(ApplicationUser user, string password)
         {
             var serverClient = _httpClientFactory.CreateClient();
             var discoveryDocument = await serverClient.GetDiscoveryDocumentAsync(_identityServerOptions.Value.EndPoint);
-            
+
             var tokenResponse = await serverClient.RequestPasswordTokenAsync(
                 new PasswordTokenRequest
                 {

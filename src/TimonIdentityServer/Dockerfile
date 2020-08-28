@@ -37,7 +37,7 @@ RUN update-ca-certificates
 RUN chmod 777 localhost.pfx
 RUN chmod 777 localhost2.pfx
 
-RUN echo 'timon-identity-server.openfaas-fn.svc 127.0.0.1' >> /etc/hosts
+#RUN echo 'timon-identity-server.openfaas-fn.svc 127.0.0.1' >> /etc/hosts
 
 #RUN openssl req -x509 -nodes -new -days 1024 -newkey rsa:2048 -keyout localhost2.key -out localhost2.crt -subj "/C=US/CN=timon-identity-server.openfaas-fn.svc"
 #RUN openssl pkcs12 -passout pass: -export -out localhost2.pfx -inkey localhost2.key -in localhost2.crt
