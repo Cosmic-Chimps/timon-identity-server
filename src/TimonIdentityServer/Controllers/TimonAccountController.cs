@@ -83,6 +83,11 @@ namespace TimonIdentityServer.Controllers
 
             var user = await _userManager.FindByEmailAsync(to.Email).ConfigureAwait(false);
 
+            if (user == null)
+            {
+                return NotFound();
+            }
+
             var result = await _signInManager.PasswordSignInAsync(user.UserName, to.Password, false, false)
                 .ConfigureAwait(false);
 
