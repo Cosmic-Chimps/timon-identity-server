@@ -1,7 +1,6 @@
 {
     "version": "2.0.0",
-    "tasks": [
-        {
+    "tasks": [{
             "label": "build",
             "command": "dotnet",
             "type": "process",
@@ -47,7 +46,7 @@
             "componentsPath": "./components",
             "enableMetrics": false,
             "grpcPort": 50002,
-            "httpPort": 3502
+            "httpPort": 3501
         },
         {
             "appId": "timon-identity-server",
