@@ -10,8 +10,8 @@ using Newtonsoft.Json.Serialization;
 public class PublishRegisteredUser : IRequest<PublishRegisteredUserResponse>
 {
   public Guid Id { get; private set; }
-  public String Email { get; private set; }
-  public String AccessToken { get; private set; }
+  public string Email { get; private set; }
+  public string AccessToken { get; private set; }
 
   public PublishRegisteredUser(Guid id, string email, string accessToken)
   {
@@ -28,10 +28,14 @@ public class PublishRegisteredUserResponse
   [JsonProperty("userId")]
   public string UserId { get; private set; }
 
-  public PublishRegisteredUserResponse(string clubId, string userId)
+  [JsonProperty("displayName")]
+  public string DisplayName { get; private set; }
+
+  public PublishRegisteredUserResponse(string clubId, string userId, string displayName)
   {
     ClubId = clubId;
     UserId = userId;
+    DisplayName = displayName;
   }
 }
 

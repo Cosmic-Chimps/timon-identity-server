@@ -26,7 +26,7 @@ namespace TimonIdentityServer.Services
 
       var claims = new List<Claim>
         {
-            new Claim("email", user.Email)
+            new Claim("email", user.Email),
         };
 
       context.IssuedClaims.AddRange(claims);
@@ -35,6 +35,12 @@ namespace TimonIdentityServer.Services
       if (timonUser != null)
       {
         context.IssuedClaims.Add(timonUser);
+      }
+
+      var displayName = userClaims.FirstOrDefault(x => x.Type == "timonUserDisplayName");
+      if (displayName != null)
+      {
+        context.IssuedClaims.Add(displayName);
       }
     }
 

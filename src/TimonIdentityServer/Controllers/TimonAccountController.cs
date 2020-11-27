@@ -88,6 +88,7 @@ namespace TimonIdentityServer.Controllers
       var response = await _mediator.Send(payload);
 
       await _userManager.AddClaimAsync(user, new Claim("timonUser", response.UserId));
+      await _userManager.AddClaimAsync(user, new Claim("timonUserDisplayName", response.DisplayName));
 
       token = await GetTokenAsync(user, model.Password);
 
