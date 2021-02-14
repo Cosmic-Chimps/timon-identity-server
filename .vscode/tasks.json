@@ -1,6 +1,7 @@
 {
     "version": "2.0.0",
-    "tasks": [{
+    "tasks": [
+        {
             "label": "build",
             "command": "dotnet",
             "type": "process",
@@ -43,7 +44,7 @@
             "label": "daprd-debug",
             "type": "daprd",
             "dependsOn": "build",
-            "componentsPath": "./components",
+            "componentsPath": "./src/TimonIdentityServer/components",
             "enableMetrics": false,
             "grpcPort": 50002,
             "httpPort": 3501
