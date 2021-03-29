@@ -28,6 +28,7 @@ namespace TimonIdentityServer
 
             config.AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{environment}.json", optional: true)
+                .AddEnvironmentVariables()
                 .Build();
         }
 
@@ -55,7 +56,7 @@ namespace TimonIdentityServer
             services.AddControllers().AddDapr();
             services.AddHealthChecks();
 
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = Configuration.GetValue<string>("CONNECTION_STRING") ?? Configuration.GetConnectionString("DefaultConnection");
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddDbContext<ApplicationDbContext>(options =>
