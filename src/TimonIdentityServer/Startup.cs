@@ -57,7 +57,6 @@ namespace TimonIdentityServer
             services.AddHealthChecks();
 
             var connectionString = Configuration.GetValue<string>("CONNECTION_STRING") ?? Configuration.GetConnectionString("DefaultConnection");
-            System.Console.WriteLine(connectionString);
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -105,9 +104,11 @@ namespace TimonIdentityServer
             }
             else
             {
-                // var cert = new X509Certificate2(Path.Combine(HosEnvironment.ContentRootPath, ".MyCertificate.pfx"), "pass");
+                var certificatePath = Configuration.GetValue<string>("CERTIFICATE_PATH");
+                var certificatePassword = Configuration.GetValue<string>("CERTIFICATE_PASSWORD");
+                var cert = new X509Certificate2(Path.Combine(HosEnvironment.ContentRootPath, certificatePath), certificatePassword);
                 // var cert2 = new X509Certificate2(Path.Combine(HosEnvironment.ContentRootPath, "localhost2.pfx"), "");
-                // builder.AddSigningCredential(cert);
+                builder.AddSigningCredential(cert);
             }
 
             services.AddMediatR(typeof(Startup));

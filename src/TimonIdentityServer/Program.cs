@@ -8,8 +8,6 @@ namespace TimonIdentityServer
     {
         public static void Main(string[] args)
         {
-            var x = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-            System.Console.WriteLine(x);
             CreateHostBuilder(args).Build().Run();
         }
 
