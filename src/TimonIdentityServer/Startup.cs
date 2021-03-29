@@ -53,6 +53,7 @@ namespace TimonIdentityServer
 
             services.AddControllersWithViews();
             services.AddControllers().AddDapr();
+            services.AddHealthChecks();
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
@@ -146,6 +147,7 @@ namespace TimonIdentityServer
             {
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
+                endpoints.MapHealthChecks("/health");
             });
         }
 

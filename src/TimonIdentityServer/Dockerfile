@@ -1,66 +1,33 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-WORKDIR /src
-COPY ["TimonIdentityServer.csproj", "./"]
-RUN dotnet restore "./TimonIdentityServer.csproj"
+FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
+WORKDIR /build
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "TimonIdentityServer.csproj" -c Release -o /app/build
+
+RUN dotnet restore "TimonIdentityServer.csproj"
 
 FROM build AS publish
 RUN dotnet publish "TimonIdentityServer.csproj" -c Release -o /app/publish
 
 FROM base AS final
-
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-#RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -config localhost.conf
-
-#RUN openssl req -x509 -nodes -new -days 1024 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -subj "/C=US/CN=localhost"
-#RUN openssl pkcs12 -passout pass: -export -out localhost.pfx -inkey localhost.key -in localhost.crt
-#
-#RUN openssl verify -CAfile localhost.crt localhost.crt
-
-#RUN openssl verify localhost.crt
 
 RUN cp localhost.crt /usr/local/share/ca-certificates
 RUN cp localhost2.crt /usr/local/share/ca-certificates
 RUN update-ca-certificates
 
-#RUN openssl verify localhost.crt
-#
-#RUN ls /etc/ssl/certs/localhost.pem
-#
 RUN chmod 777 localhost.pfx
 RUN chmod 777 localhost2.pfx
 
-#RUN echo 'timon-identity-server.openfaas-fn.svc 127.0.0.1' >> /etc/hosts
-
-#RUN openssl req -x509 -nodes -new -days 1024 -newkey rsa:2048 -keyout localhost2.key -out localhost2.crt -subj "/C=US/CN=timon-identity-server.openfaas-fn.svc"
-#RUN openssl pkcs12 -passout pass: -export -out localhost2.pfx -inkey localhost2.key -in localhost2.crt
-#
-#RUN openssl verify -CAfile localhost2.crt localhost2.crt
-#
-##RUN openssl verify localhost.crt
-#
-#RUN cp localhost2.crt /usr/local/share/ca-certificates
-#RUN update-ca-certificates
-#
-#RUN openssl verify localhost2.crt
-#
-#RUN ls /etc/ssl/certs/localhost2.pem
-#
-#RUN chmod 777 localhost2.pfx
-
 ENV ASPNETCORE_ENVIRONMENT=Production
-ENV ASPNETCORE_URLS="http://*:8080;https://*:8443"
-#ENV ASPNETCORE_URLS="http://*:8080;https://*:8443"
-EXPOSE 8080
-EXPOSE 8443
+ENV ASPNETCORE_URLS="https://*:5001"
+EXPOSE 5001
 
-#RUN useradd -u 8877 docker
-#USER docker
+RUN addgroup --gid 998 --system appgroup \
+    && adduser --uid 1004 --system appuser --ingroup appgroup
+
+USER appuser
+
 ENTRYPOINT ["dotnet", "TimonIdentityServer.dll"]
