@@ -107,8 +107,10 @@ namespace TimonIdentityServer
                 var certificatePath = Configuration.GetValue<string>("CERTIFICATE_PATH");
                 var certificatePassword = Configuration.GetValue<string>("CERTIFICATE_PASSWORD");
                 var cert = new X509Certificate2(Path.Combine(HosEnvironment.ContentRootPath, certificatePath), certificatePassword);
-                // var cert2 = new X509Certificate2(Path.Combine(HosEnvironment.ContentRootPath, "localhost2.pfx"), "");
                 builder.AddSigningCredential(cert);
+                // var cert = new X509Certificate2(Path.Combine(HosEnvironment.ContentRootPath, "cert.pfx"), "");
+                // // var cert2 = new X509Certificate2(Path.Combine(HosEnvironment.ContentRootPath, "localhost2.pfx"), "");
+                // builder.AddSigningCredential(cert);
             }
 
             services.AddMediatR(typeof(Startup));
