@@ -1,5 +1,6 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0.4 AS base
 WORKDIR /app
+COPY . .
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 WORKDIR /build
@@ -14,14 +15,14 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-RUN cp localhost3.crt /usr/local/share/ca-certificates
+RUN cp .MyCertificate.crt /usr/local/share/ca-certificates
 RUN update-ca-certificates
 
-RUN chmod 777 localhost3.pfx
+RUN chmod 777 .MyCertificate.pfx
 
 ENV ASPNETCORE_ENVIRONMENT=Production
-ENV ASPNETCORE_URLS="https://*:5001"
-EXPOSE 5001
+ENV ASPNETCORE_URLS="https://*"
+EXPOSE 443
 
 RUN addgroup --gid 998 --system appgroup \
     && adduser --uid 1004 --system appuser --ingroup appgroup
