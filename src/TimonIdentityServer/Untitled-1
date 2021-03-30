@@ -1,5 +1,0 @@
-openssl pkcs12 \
-    -export \
-    -inkey localhost.key \
-    -in localhost.crt \
-    -out localhost.pfx
