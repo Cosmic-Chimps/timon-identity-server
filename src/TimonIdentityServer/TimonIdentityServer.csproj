@@ -29,10 +29,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update=".MyCertificate.crt">
+      <None Include=".MyCertificate.crt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update=".MyCertificate.pfx">
+      <None Include=".MyCertificate.pfx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

@@ -21,7 +21,7 @@ RUN update-ca-certificates
 RUN chmod 777 .MyCertificate.pfx
 
 ENV ASPNETCORE_ENVIRONMENT=Production
-ENV ASPNETCORE_URLS="https://*:8443"
+ENV ASPNETCORE_URLS="https://*:8443;http://*:8080"
 EXPOSE 8443
 
 RUN addgroup --gid 998 --system appgroup \
